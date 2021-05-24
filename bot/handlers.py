@@ -1,4 +1,5 @@
 from bot.bot import bot
+from knopki import start_buttons
 from database.models import Users
 from database.models import Sources
 from database.models import Subscription
@@ -9,12 +10,12 @@ from telebot import types
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
-    print(f"------------\n\tStart \n\tchat id: {message.chat.id}\n------------")
+    # print(f"------------\n\tStart \n\tchat id: {message.chat.id}\n------------")
     bot.send_message(message.chat.id, 'Добро пожаловать в бот Агрегатор новостей! '
                                       'Здесь вы можете подписаться на рассылку '
                                       'интересующих вас новостей, которые бот '
                                       'будет вам отправлять. Для вывода новостных порталов '
-                                      'напишите команду /news')
+                                      'напишите новости.', reply_markup=start_buttons())
     user = Users(db.get_connection())
     user.create(message.chat.id)
 
@@ -109,7 +110,7 @@ def remove_source(message):
                                       f"\"/add {name} {url}\"")
 
 
-@bot.message_handler(func=lambda message: message.text == "мои подписки")
+@bot.message_handler(func=lambda message: message.text == "мои подписки", )
 @bot.message_handler(commands=['mySources'])
 def my_sources(message):
     source = Sources(db.get_connection())
@@ -122,7 +123,7 @@ def my_sources(message):
 
     if not subs:
         bot.send_message(message.chat.id, 'у вас нет активных подписок :(\n'
-                                          'Что бы оформить подписку нажмите /sources')
+                                          'Что бы оформить подписку нажмите кнопку новости')
         return
 
     source_names = dict()
@@ -137,7 +138,7 @@ def my_sources(message):
         id_, s_id, u_id, date = s
         keyboard.add(types.InlineKeyboardButton(text=source_names[s_id], callback_data=f'del:{s_id}'))
 
-    question = 'Ваши подписки. Что бы отписаться просто нажмите на ненужные.:'
+    question = 'Что бы отписаться нажмите на ненужные новостные порталы:'
     bot.send_message(message.from_user.id, text=question, reply_markup=keyboard)
 
 
