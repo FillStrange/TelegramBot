@@ -1,7 +1,7 @@
 
 
 class Configuration(object):
-    TOKEN = r"1836217541:AAGQfX9almf5hIgaPuG9npWQDlwrrBO5pQk"
+    TOKEN = r"/"
 
     DB_NAME = 'TelegramBot'
     DB_HOST = 'localhost'
