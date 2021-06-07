@@ -8,3 +8,4 @@ db = Database(
     password=Configuration.DB_PASS,
     host=Configuration.DB_HOST
 )
+

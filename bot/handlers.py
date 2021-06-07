@@ -17,6 +17,8 @@ def start_message(message):
                                       'будет вам отправлять. Для вывода новостных порталов '
                                       'напишите новости.', reply_markup=start_buttons())
     user = Users(db.get_connection())
+    if user.get_user(tg_id=message.chat.id):
+        return
     user.create(message.chat.id)
 
 
@@ -110,7 +112,7 @@ def remove_source(message):
                                       f"\"/add {name} {url}\"")
 
 
-@bot.message_handler(func=lambda message: message.text == "мои подписки", )
+@bot.message_handler(func=lambda message: message.text.lower() == "мои подписки", )
 @bot.message_handler(commands=['mySources'])
 def my_sources(message):
     source = Sources(db.get_connection())
@@ -142,8 +144,8 @@ def my_sources(message):
     bot.send_message(message.from_user.id, text=question, reply_markup=keyboard)
 
 
-@bot.message_handler(func=lambda message: message.text == "новости")
-@bot.message_handler(commands=['sources'])
+@bot.message_handler(func=lambda message: message.text.lower() == "новости")
+@bot.message_handler(commands=['news'])
 def start(message):
     keyboard = types.InlineKeyboardMarkup()  #Клавиатура
 

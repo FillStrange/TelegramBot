@@ -25,7 +25,12 @@ def parser_thread():
             sources = source.get_all()
             for s in sources:
                 id_, name, url, context = s
+
                 new_context = parse(url.strip())
+
+                if new_context:
+                    new_context = new_context.replace("'", "")
+
                 if new_context != context and new_context:
                     print("new post!\n", new_context)
                     source.get(source_id=id_)
